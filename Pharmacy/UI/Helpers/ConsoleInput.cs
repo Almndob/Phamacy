@@ -12,8 +12,9 @@ namespace Pharmacy.UI.Helpers
                 if (!string.IsNullOrWhiteSpace(input))
                     return input.Trim();
 
-                Console.WriteLine("لا يمكن ترك القيمة فارغة.");
-            }
+                Console.WriteLine(
+                      "Enter a valid positive decimal number.");
+            }          
         }
 
         public static int ReadNonNegativeInteger(string message)
@@ -26,7 +27,9 @@ namespace Pharmacy.UI.Helpers
                 if (int.TryParse(input, out int value) && value >= 0)
                     return value;
 
-                Console.WriteLine("أدخل رقمًا صحيحًا غير سالب.");
+                //  Console.WriteLine("أدخل رقمًا صحيحًا غير سالب.");
+                Console.WriteLine(
+                      "Enter a valid positive number.");
             }
         }
 
@@ -40,7 +43,8 @@ namespace Pharmacy.UI.Helpers
                 if (decimal.TryParse(input, out decimal value) && value >= 0)
                     return value;
 
-                Console.WriteLine("أدخل رقمًا عشريًا غير سالب.");
+                   Console.WriteLine(
+                      "Enter a valid positive decimal number.");
             }
         }
 
@@ -54,8 +58,23 @@ namespace Pharmacy.UI.Helpers
                 if (DateTime.TryParse(input, out DateTime value))
                     return value;
 
-                Console.WriteLine("أدخل تاريخًا صحيحًا.");
+                Console.WriteLine(
+                    "Invalid date. Use yyyy-MM-dd, e.g. 2027-12-31.");
             }
+        }
+        
+        public static void ShowMessage(string message)
+        {
+            Console.WriteLine();
+            Console.WriteLine(message);
+            Pause();
+        }
+
+        public static void Pause()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Press Enter to continue...");
+            Console.ReadLine();
         }
     }
 }
