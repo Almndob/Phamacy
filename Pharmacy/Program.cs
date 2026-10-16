@@ -1,77 +1,62 @@
-
 using Pharmacy.Application.Services;
-using Pharmacy.Domain.Entities;
-using Pharmacy.Domain.Enums;
+using Pharmacy.Data;
+using Pharmacy.UI;
+using Pharmacy.UI.Menus;
 
+namespace Pharmacy
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // 1. Create Services
+            var categoryService = new CategoryService();
 
-CategoryService categoryService = new CategoryService();
-SupplierService supplierService = new SupplierService();
-MedicineService medicineService = new MedicineService();
-BatchService batchService =new BatchService();
-/*
-var category = new Category(
-    1,
-    "Painkillers"
-);*/
-categoryService.Add("Painkillers");
-Category? category = categoryService.SearchByName("Painkillers");
+            var medicineService = new MedicineService();
 
+            var supplierService = new SupplierService();
+            
+            var pharmacySeeder = new PharmacySeeder(supplierService,categoryService,medicineService);
+            pharmacySeeder.Seed();
 
-supplierService.Add("Al-Shifa Supplier","777123456");
+            var batchService = new BatchService();
 
+            var purchaseService = new PurchaseService(
+                supplierService,
+                medicineService,
+                batchService);
 
-medicineService.Add( "Panadol",
-    "GSK",
-    "12345678",
-    "Paracetamol",
-    "500mg",
-    1.50m,
-    2.00m,
-    10,
-    DosageForm.Tablet,
-    category);
+            var saleService = new SaleService(
+                medicineService,
+                batchService);
 
-var purchaseService = new PurchaseService(supplierService,medicineService,batchService);
+            // 2. Create UI Objects
+            var categoryUI = new CategoryUI(categoryService);
 
+            var medicineUI = new MedicineUI(medicineService,categoryUI);
 
+            var supplierUI = new SupplierUI(supplierService);
 
-var invoice = purchaseService.CreatePurchase(
-    "PUR-001",
-    PaymentMethod.Card,
-    1,
-    1,
-    "A125",
-    20,
-    DateTime.Today.AddMonths(-2),
-    DateTime.Today.AddMonths(10),
-    1.50m
-);
+            var purchaseUI = new PurchaseUI(
+                purchaseService,
+                supplierService,
+                medicineService);
 
+            var saleUI = new SaleUI(
+                saleService,
+                medicineService,
+                batchService);
 
-    var p=  purchaseService.GetById(1);
-    Console.WriteLine($"dffddd {p.Id}");
-Console.WriteLine("=== Purchase Test ===");
+            // 3. Create Main Menu
+            var mainMenu = new MainMenu(
+                categoryUI,
+                medicineUI,
+                supplierUI,
+                purchaseUI,
+                saleUI);
 
-Console.WriteLine($"Invoice ID: {invoice.Id}");
-Console.WriteLine($"Invoice Number: {invoice.InvoiceNumber}");
-Console.WriteLine($"Supplier: {invoice.Supplier.Name}");
-Console.WriteLine($"Total: {invoice.TotalPrice}");
-
-var item = invoice.PurchaseInvoiceItems[0];
-
-Console.WriteLine();
-Console.WriteLine($"Medicine: {item.Medicine.Name}");
-Console.WriteLine($"Quantity: {item.Quantity}");
-Console.WriteLine($"Unit Price: {item.UnitPrice}");
-Console.WriteLine($"Item Total: {item.TotalPrice}");
-
-var invoiceBatch = item.InvoiceBatches[0];
-
-Console.WriteLine();
-Console.WriteLine($"Batch Number: {invoiceBatch.Batch.BatchNumber}");
-Console.WriteLine($"Batch Quantity: {invoiceBatch.Batch.Quantity}");
-Console.WriteLine($"Invoice Batch Quantity: {invoiceBatch.Quantity}");
-
-Console.WriteLine();
-Console.WriteLine(
-    $"Purchase Invoices Count: {purchaseService.GetAll().Count}");
+            // 4. Start Application
+            mainMenu.Run();
+        }
+    }
+}

@@ -34,17 +34,17 @@ namespace Pharmacy.UI
 
         public void AddMedicine()
         {
-            string name = ConsoleInput.ReadRequiredText("اسم الدواء: ");
-            string company = ConsoleInput.ReadRequiredText("الشركة المصنعة: ");
-            string barcode = ConsoleInput.ReadRequiredText("الباركود: ");
-            string activeIngredient = ConsoleInput.ReadRequiredText("المادة الفعالة: ");
-            string strength = ConsoleInput.ReadRequiredText("التركيز: ");
+            string name = ConsoleInput.ReadRequiredText("Medicine Name: ");
+            string company = ConsoleInput.ReadRequiredText("Manufacturer: ");
+            string barcode = ConsoleInput.ReadRequiredText("Barcode: ");
+            string activeIngredient = ConsoleInput.ReadRequiredText("Active Ingredient: ");
+            string strength = ConsoleInput.ReadRequiredText("Strength: ");
 
-            decimal purchasePrice = ConsoleInput.ReadDecimal("سعر الشراء: ");
-            decimal salePrice = ConsoleInput.ReadDecimal("سعر البيع: ");
+            decimal purchasePrice = ConsoleInput.ReadDecimal("Purchase Price: ");
+            decimal salePrice = ConsoleInput.ReadDecimal("Sale Price: ");
 
             int reorderLevel = ConsoleInput.ReadNonNegativeInteger(
-                "مستوى إعادة الطلب: ");
+                "Reorder Level: ");
 
             DosageForm dosageForm = DosageForm.Tablet;
 
@@ -62,20 +62,20 @@ namespace Pharmacy.UI
                 dosageForm,
                 category);
 
-            Console.WriteLine("تمت إضافة الدواء بنجاح.");
+            Console.WriteLine("Medicine added successfully.");
         }
 
         public void SearchMedicine()
         {
             string name = ConsoleInput.ReadRequiredText(
-                "البحث عن الدواء، أدخل الاسم: ");
+                "Search for a medicine by name: ");
 
             List<Medicine> medicines =
                 _medicineService.SearchMedicineByName(name);
 
             if (medicines.Count == 0)
             {
-                Console.WriteLine("لم يتم العثور على أي دواء بهذا الاسم.");
+                Console.WriteLine("No medicines found with that name.");
                 return;
             }
 
@@ -86,7 +86,7 @@ namespace Pharmacy.UI
         {
             if (medicines.Count == 0)
             {
-                Console.WriteLine("لا توجد أدوية للعرض.");
+                Console.WriteLine("No medicines to display.");
                 return;
             }
 
@@ -101,24 +101,24 @@ namespace Pharmacy.UI
 
         private void DisplayMedicineDetails(Medicine medicine)
         {
-            Console.WriteLine($"المعرف            : {medicine.Id}");
-            Console.WriteLine($"الاسم             : {medicine.Name}");
-            Console.WriteLine($"الشركة المصنعة    : {medicine.Company}");
-            Console.WriteLine($"الباركود          : {medicine.Barcode}");
-            Console.WriteLine($"المادة الفعالة     : {medicine.ActiveIngredient}");
-            Console.WriteLine($"التركيز            : {medicine.Strength}");
-            Console.WriteLine($"سعر الشراء         : {medicine.PurchasePrice:C}");
-            Console.WriteLine($"سعر البيع          : {medicine.SalePrice:C}");
-            Console.WriteLine($"مستوى إعادة الطلب  : {medicine.ReorderLevel}");
-            Console.WriteLine($"الشكل الدوائي      : {medicine.DosageForm}");
-            Console.WriteLine($"الفئة              : {medicine.Category?.Name}");
+            Console.WriteLine($"ID                : {medicine.Id}");
+            Console.WriteLine($"Name              : {medicine.Name}");
+            Console.WriteLine($"Manufacturer      : {medicine.Company}");
+            Console.WriteLine($"Barcode           : {medicine.Barcode}");
+            Console.WriteLine($"Active Ingredient : {medicine.ActiveIngredient}");
+            Console.WriteLine($"Strength          : {medicine.Strength}");
+            Console.WriteLine($"Purchase Price    : {medicine.PurchasePrice:C}");
+            Console.WriteLine($"Sale Price        : {medicine.SalePrice:C}");
+            Console.WriteLine($"Reorder Level     : {medicine.ReorderLevel}");
+            Console.WriteLine($"Dosage Form       : {medicine.DosageForm}");
+            Console.WriteLine($"Category          : {medicine.Category?.Name}");
         }
 
         public void DisplayAll()
         {
             IReadOnlyList<Medicine> medicines = _medicineService.GetAll();
 
-            Console.WriteLine("========== عرض جميع الأدوية ==========");
+            Console.WriteLine("========== ALL MEDICINES ==========");
 
             DisplayMedicine(medicines.ToList());
         }
@@ -129,26 +129,26 @@ namespace Pharmacy.UI
 
             if (medicines.Count == 0)
             {
-                Console.WriteLine("لا توجد أدوية للحذف.");
+                Console.WriteLine("No medicines available to remove.");
                 return;
             }
 
             DisplayMedicine(medicines.ToList());
 
             int inputId = ConsoleInput.ReadNonNegativeInteger(
-                "أدخل معرف الدواء المراد حذفه: ");
+                "Enter the ID of the medicine to remove: ");
 
             Medicine? medicine = _medicineService.GetById(inputId);
 
             if (medicine is null)
             {
-                Console.WriteLine($"لا يوجد دواء بهذا المعرف: {inputId}");
+                Console.WriteLine($"No medicine found with ID: {inputId}");
                 return;
             }
 
             _medicineService.RemoveMedicine(medicine.Id);
 
-            Console.WriteLine("تم حذف الدواء بنجاح.");
+            Console.WriteLine("Medicine removed successfully.");
         }
 
         public void RunMenu()
@@ -183,16 +183,15 @@ namespace Pharmacy.UI
                         return;
 
                     default:
-                        Console.WriteLine("اختيار غير صحيح، حاول مرة أخرى.");
+                        Console.WriteLine(
+                            "Invalid option. Please try again.");
                         break;
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("اضغط أي مفتاح للمتابعة...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
             }
-
         }
     }
-
 }

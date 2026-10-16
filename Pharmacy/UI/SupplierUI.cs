@@ -14,7 +14,7 @@ namespace Pharmacy
             _supplierService = supplierService;
         }
 
-        // عرض قائمة إدارة الموردين
+        // Display the supplier management menu
         public void ShowMenu()
         {
             ConsoleMenu.ShowMenu(
@@ -27,27 +27,27 @@ namespace Pharmacy
                 "Back");
         }
 
-        // إضافة مورد
+        // Add a supplier
         public void AddSupplier()
         {
-            Console.WriteLine("========== إضافة مورد جديد ==========");
+            Console.WriteLine("========== Add New Supplier ==========");
 
             string name = ConsoleInput.ReadRequiredText(
-                "اسم المورد: ");
+                "Supplier Name: ");
 
             string phone = ConsoleInput.ReadRequiredText(
-                "رقم الهاتف: ");
+                "Phone Number: ");
 
-            Console.Write("البريد الإلكتروني (اختياري): ");
+            Console.Write("Email (optional): ");
             string? email = Console.ReadLine();
 
-            Console.Write("العنوان (اختياري): ");
+            Console.Write("Address (optional): ");
             string? address = Console.ReadLine();
 
-            Console.Write("الرقم الضريبي (اختياري): ");
+            Console.Write("Tax Number (optional): ");
             string? taxNumber = Console.ReadLine();
 
-            Console.Write("رقم السجل التجاري (اختياري): ");
+            Console.Write("Commercial Registration Number (optional): ");
             string? commercialReg = Console.ReadLine();
 
             _supplierService.Add(
@@ -59,17 +59,17 @@ namespace Pharmacy
                 commercialReg);
 
             Console.WriteLine();
-            Console.WriteLine("تمت إضافة المورد بنجاح.");
+            Console.WriteLine("Supplier added successfully.");
         }
 
-        // البحث عن مورد بالاسم أو رقم الهاتف
+        // Search for a supplier by name or phone number
         public void SearchSupplier()
         {
-            Console.WriteLine("========== البحث عن مورد ==========");
-            Console.WriteLine("1. البحث بالاسم");
-            Console.WriteLine("2. البحث برقم الهاتف");
+            Console.WriteLine("========== Search Supplier ==========");
+            Console.WriteLine("1. Search by Name");
+            Console.WriteLine("2. Search by Phone Number");
 
-            Console.Write("اختر طريقة البحث: ");
+            Console.Write("Select search method: ");
             string choice = Console.ReadLine() ?? string.Empty;
 
             switch (choice)
@@ -77,7 +77,7 @@ namespace Pharmacy
                 case "1":
                     {
                         string name = ConsoleInput.ReadRequiredText(
-                            "أدخل اسم المورد: ");
+                            "Enter supplier name: ");
 
                         IReadOnlyList<Supplier> suppliers =
                             _supplierService.SearchByName(name);
@@ -89,7 +89,7 @@ namespace Pharmacy
                 case "2":
                     {
                         string phone = ConsoleInput.ReadRequiredText(
-                            "أدخل رقم الهاتف: ");
+                            "Enter phone number: ");
 
                         IReadOnlyList<Supplier> suppliers =
                             _supplierService.SearchByPhone(phone);
@@ -99,12 +99,12 @@ namespace Pharmacy
                     }
 
                 default:
-                    Console.WriteLine("اختيار غير صحيح.");
+                    Console.WriteLine("Invalid option.");
                     break;
             }
         }
 
-        // تعديل بيانات مورد
+        // Update supplier information
         public void UpdateSupplier()
         {
             IReadOnlyList<Supplier> suppliers =
@@ -112,43 +112,43 @@ namespace Pharmacy
 
             if (suppliers.Count == 0)
             {
-                Console.WriteLine("لا يوجد موردون لتعديل بياناتهم.");
+                Console.WriteLine("There are no suppliers to update.");
                 return;
             }
 
             DisplaySuppliers(suppliers);
 
             int id = ConsoleInput.ReadNonNegativeInteger(
-                "أدخل معرف المورد المراد تعديله: ");
+                "Enter the ID of the supplier to update: ");
 
             Supplier? supplier = _supplierService.GetById(id);
 
             if (supplier is null)
             {
-                Console.WriteLine("لم يتم العثور على المورد.");
+                Console.WriteLine("Supplier not found.");
                 return;
             }
 
             Console.WriteLine();
-            Console.WriteLine("اترك الحقل فارغًا للاحتفاظ بالقيمة الحالية.");
+            Console.WriteLine("Leave a field empty to keep its current value.");
 
-            Console.Write($"اسم المورد [{supplier.Name}]: ");
+            Console.Write($"Supplier Name [{supplier.Name}]: ");
             string? name = Console.ReadLine();
 
-            Console.Write($"رقم الهاتف [{supplier.Phone}]: ");
+            Console.Write($"Phone Number [{supplier.Phone}]: ");
             string? phone = Console.ReadLine();
 
-            Console.Write($"البريد الإلكتروني [{supplier.Email ?? "غير محدد"}]: ");
+            Console.Write($"Email [{supplier.Email ?? "Not specified"}]: ");
             string? email = Console.ReadLine();
 
-            Console.Write($"العنوان [{supplier.Address ?? "غير محدد"}]: ");
+            Console.Write($"Address [{supplier.Address ?? "Not specified"}]: ");
             string? address = Console.ReadLine();
 
-            Console.Write($"الرقم الضريبي [{supplier.TaxNumber ?? "غير محدد"}]: ");
+            Console.Write($"Tax Number [{supplier.TaxNumber ?? "Not specified"}]: ");
             string? taxNumber = Console.ReadLine();
 
             Console.Write(
-                $"السجل التجاري [{supplier.CommercialRegistrationNumber ?? "غير محدد"}]: ");
+                $"Commercial Registration Number [{supplier.CommercialRegistrationNumber ?? "Not specified"}]: ");
             string? commercialReg = Console.ReadLine();
 
             _supplierService.Update(
@@ -163,10 +163,10 @@ namespace Pharmacy
                     : commercialReg);
 
             Console.WriteLine();
-            Console.WriteLine("تم تحديث بيانات المورد بنجاح.");
+            Console.WriteLine("Supplier information updated successfully.");
         }
 
-        // حذف مورد
+        // Delete a supplier
         public void DeleteSupplier()
         {
             IReadOnlyList<Supplier> suppliers =
@@ -174,26 +174,26 @@ namespace Pharmacy
 
             if (suppliers.Count == 0)
             {
-                Console.WriteLine("لا يوجد موردون للحذف.");
+                Console.WriteLine("There are no suppliers to delete.");
                 return;
             }
 
             DisplaySuppliers(suppliers);
 
             int id = ConsoleInput.ReadNonNegativeInteger(
-                "أدخل معرف المورد المراد حذفه: ");
+                "Enter the ID of the supplier to delete: ");
 
             Supplier? supplier = _supplierService.GetById(id);
 
             if (supplier is null)
             {
-                Console.WriteLine("لم يتم العثور على المورد.");
+                Console.WriteLine("Supplier not found.");
                 return;
             }
 
             Console.WriteLine();
-            Console.WriteLine($"المورد: {supplier.Name}");
-            Console.Write("هل أنت متأكد من الحذف؟ (y/n): ");
+            Console.WriteLine($"Supplier: {supplier.Name}");
+            Console.Write("Are you sure you want to delete this supplier? (y/n): ");
 
             string confirmation = Console.ReadLine() ?? string.Empty;
 
@@ -201,7 +201,7 @@ namespace Pharmacy
                     "y",
                     StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine("تم إلغاء عملية الحذف.");
+                Console.WriteLine("Deletion cancelled.");
                 return;
             }
 
@@ -209,28 +209,28 @@ namespace Pharmacy
 
             Console.WriteLine(
                 deleted
-                    ? "تم حذف المورد بنجاح."
-                    : "تعذر حذف المورد.");
+                    ? "Supplier deleted successfully."
+                    : "Unable to delete the supplier.");
         }
 
-        // عرض جميع الموردين
+        // Display all suppliers
         public void DisplayAll()
         {
             IReadOnlyList<Supplier> suppliers =
                 _supplierService.GetAll();
 
-            Console.WriteLine("========== جميع الموردين ==========");
+            Console.WriteLine("========== All Suppliers ==========");
 
             DisplaySuppliers(suppliers);
         }
 
-        // عرض قائمة من الموردين
+        // Display a list of suppliers
         private void DisplaySuppliers(
             IReadOnlyList<Supplier> suppliers)
         {
             if (suppliers.Count == 0)
             {
-                Console.WriteLine("لا توجد نتائج للعرض.");
+                Console.WriteLine("No results to display.");
                 return;
             }
 
@@ -243,20 +243,20 @@ namespace Pharmacy
             Console.WriteLine("----------------------------------------");
         }
 
-        // عرض تفاصيل مورد واحد
+        // Display the details of a single supplier
         private void DisplaySupplierDetails(Supplier supplier)
         {
-            Console.WriteLine($"المعرف             : {supplier.Id}");
-            Console.WriteLine($"اسم المورد         : {supplier.Name}");
-            Console.WriteLine($"رقم الهاتف         : {supplier.Phone}");
-            Console.WriteLine($"البريد الإلكتروني  : {supplier.Email ?? "غير محدد"}");
-            Console.WriteLine($"العنوان            : {supplier.Address ?? "غير محدد"}");
-            Console.WriteLine($"الرقم الضريبي      : {supplier.TaxNumber ?? "غير محدد"}");
+            Console.WriteLine($"ID                          : {supplier.Id}");
+            Console.WriteLine($"Supplier Name               : {supplier.Name}");
+            Console.WriteLine($"Phone Number                : {supplier.Phone}");
+            Console.WriteLine($"Email                       : {supplier.Email ?? "Not specified"}");
+            Console.WriteLine($"Address                     : {supplier.Address ?? "Not specified"}");
+            Console.WriteLine($"Tax Number                  : {supplier.TaxNumber ?? "Not specified"}");
             Console.WriteLine(
-                $"السجل التجاري      : {supplier.CommercialRegistrationNumber ?? "غير محدد"}");
+                $"Commercial Registration No. : {supplier.CommercialRegistrationNumber ?? "Not specified"}");
         }
 
-        // تشغيل قائمة الموردين
+        // Run the supplier menu
         public void RunMenu()
         {
             while (true)
@@ -296,28 +296,27 @@ namespace Pharmacy
 
                         default:
                             Console.WriteLine(
-                                "اختيار غير صحيح، حاول مرة أخرى.");
+                                "Invalid option. Please try again.");
                             break;
                     }
                 }
                 catch (ArgumentException ex)
                 {
-                    Console.WriteLine($"خطأ في البيانات: {ex.Message}");
+                    Console.WriteLine($"Invalid data: {ex.Message}");
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine($"تعذر تنفيذ العملية: {ex.Message}");
+                    Console.WriteLine($"Unable to complete the operation: {ex.Message}");
                 }
                 catch (KeyNotFoundException ex)
                 {
-                    Console.WriteLine($"لم يتم العثور على العنصر: {ex.Message}");
+                    Console.WriteLine($"Item not found: {ex.Message}");
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("اضغط أي مفتاح للمتابعة...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
             }
         }
     }
-
 }

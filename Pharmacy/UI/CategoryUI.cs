@@ -47,54 +47,56 @@ namespace Pharmacy.UI
                         return;
 
                     default:
-                        Console.WriteLine("اختيار غير صحيح، حاول مرة أخرى.");
+                        Console.WriteLine(
+                            "Invalid option. Please try again.");
                         break;
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("اضغط أي مفتاح للمتابعة...");
+                Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
             }
         }
 
         public void AddCategory()
         {
-            string name = ConsoleInput.ReadRequiredText("أدخل اسم الفئة: ");
+            string name = ConsoleInput.ReadRequiredText(
+                "Enter category name: ");
 
             _categoryService.Add(name);
 
-            Console.WriteLine("تمت إضافة الفئة بنجاح.");
+            Console.WriteLine("Category added successfully.");
         }
 
         public void SearchCategory()
         {
             string name = ConsoleInput.ReadRequiredText(
-                "أدخل اسم الفئة للبحث: ");
-
+                "Enter category name to search: ");
 
             Category? category = _categoryService.SearchByName(name);
 
             if (category is null)
             {
-                Console.WriteLine("لم يتم العثور على الفئة.");
+                Console.WriteLine("Category not found.");
                 return;
             }
 
-            Console.WriteLine($"معرف الفئة: {category.Id}");
-            Console.WriteLine($"اسم الفئة: {category.Name}");
+            Console.WriteLine($"Category ID: {category.Id}");
+            Console.WriteLine($"Category Name: {category.Name}");
         }
 
         public Category GetCategory()
         {
-            IReadOnlyList<Category> categories = _categoryService.GetAll();
+            IReadOnlyList<Category> categories =
+                _categoryService.GetAll();
 
             if (categories.Count == 0)
             {
                 throw new InvalidOperationException(
-                    "لا توجد فئات مسجلة. أضف فئة أولًا.");
+                    "No categories are registered. Add a category first.");
             }
 
-            Console.WriteLine("======= اختر الفئة =======");
+            Console.WriteLine("======= Select a Category =======");
 
             for (int i = 0; i < categories.Count; i++)
             {
@@ -103,7 +105,7 @@ namespace Pharmacy.UI
 
             while (true)
             {
-                Console.Write("اختر رقم الفئة: ");
+                Console.Write("Enter category number: ");
 
                 string input = Console.ReadLine() ?? string.Empty;
 
@@ -114,9 +116,9 @@ namespace Pharmacy.UI
                     return categories[choice - 1];
                 }
 
-                Console.WriteLine("أدخل رقمًا صحيحًا من القائمة.");
+                Console.WriteLine(
+                    "Please enter a valid number from the list.");
             }
         }
     }
-
 }
